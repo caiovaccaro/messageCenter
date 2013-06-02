@@ -31,7 +31,7 @@ NAMESPACE.MessageCenter = {
                     messagesFromArray += spacer + message[i];
                 };
 
-                message = messagesFromArray;
+                message = messagesFromArray.replace(spacer, ''); // Remove first spacer;
             }
             
             $(this.messageCenter).append('<p>' + message + '</p>').addClass(status).slideDown(function() {
