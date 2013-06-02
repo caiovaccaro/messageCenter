@@ -1,0 +1,43 @@
+@green: #46a546;
+@red: #9d261d;
+
+#messageCenter {
+	display: none;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	background-color: #fff;
+	border-top: 3px solid;
+	z-index: 100;
+	-webkit-box-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+	-moz-box-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+	box-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+	text-align: left;
+	color: #666;
+
+	&.success {
+		border-color: @green;
+	}
+
+	&.error {
+		border-color: @red;
+	}
+
+	p {
+		padding-left: 17px;
+		margin-top: 12px;
+	}
+
+	.close {
+		color: #999;
+		position: absolute;
+		right: 15px;
+		top: 4px;
+		font-size: 25px;
+		cursor: pointer;
+
+		&:hover {
+			color: #666;
+		}
+	}
+}
