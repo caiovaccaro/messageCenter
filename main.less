@@ -16,28 +16,45 @@
 	color: #666;
 
 	&.success {
-		border-color: @green;
+		background-color: @green;
+	}
+
+	&.warning {
+		background-color: @yellow;
+		color: @mainColorDark;
 	}
 
 	&.error {
-		border-color: @red;
+		background-color: @red;
 	}
 
 	p {
 		padding-left: 17px;
 		margin-top: 12px;
+		width: 940px;
+		margin: 12px auto 8px;
+	}
+
+	b {
+		font-family: @motivaExtraBold;
+		font-weight: normal;
 	}
 
 	.close {
-		color: #999;
+		color: #fff;
+		opacity: 1;
+		text-shadow: none;
 		position: absolute;
 		right: 15px;
-		top: 4px;
-		font-size: 25px;
+		top: 9px;
+		font-size: 20px;
+		padding: 3px 3px 1px 5px;
 		cursor: pointer;
+		background-color: rgba(0,0,0,0.4);
+		.border-radius(5px);
 
 		&:hover {
-			color: #666;
+			background-color: rgba(0,0,0,0.2);
 		}
 	}
 }
