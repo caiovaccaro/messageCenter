@@ -2,60 +2,81 @@ var NAMESPACE = NAMESPACE || {};
 
 NAMESPACE.MessageCenter = {
 
-	// message: Message to be shown
-	// status: 'success' or 'error'
-	// dismiss: class or id of element to trigger closing when clicked, or string 'time' to close by itself
+	// params: message, status, dismiss, callback, breaklines, close
+    // message: Message to be shown
+    // status: 'success' or 'error'
+    // dismiss: class or id of element to trigger closing when clicked, or string 'time' to close by itself
+    // callback after showing up
+    // breaklines, if true add <br> between itens of messages array
+    // close, if false don't show close link
 
-	messageCenter: '#messageCenter',
-	timeToClose: 6000
+    messageCenter: '#messageCenter',
+    timeToClose: 6000
 
-	, toOpen: function(message, status, dismiss, callback, breaklines) {
+    , toOpen: function(params) {
 
-        var messagesFromArray = '',
+        var message = params.message,
+            status = params.status,
+            dismiss = params.dismiss,
+            callback = params.callback,
+            breaklines = params.breaklines,
+            close = params.close,
+            messagesFromArray = '',
             spacer = breaklines === true ? '<br/>' : ' ';
 
         if($(this.messageCenter).is(':visible')) {
 
-            this.toClose(true, message, status, dismiss, callback, breaklines);
+            this.toClose(true, params);
 
         } else {
 
             if(typeof dismiss !== 'undefined') {
-                
+              
                 this.dismiss(dismiss);
 
             }
 
             if(message instanceof Array) {
+
                 for (var i = 0; i <= message.length - 1; i++) {
                     messagesFromArray += spacer + message[i];
                 };
 
                 message = messagesFromArray.replace(spacer, ''); // Remove first spacer;
+
             }
-            
+
+            if(typeof close !== 'undefined' && close === false) {
+
+                $(this.messageCenter).find('.close').hide();
+
+            }
+
             $(this.messageCenter).append('<p>' + message + '</p>').addClass(status).slideDown(function() {
 
                 if(typeof callback !== 'undefined' && typeof callback === 'function') {
                     callback();
                 }
+
             });
 
         }
 
     }
 
-    , toClose: function(open, message, status, dismiss, callback, breaklines) {
+    , toClose: function(open, params) {
 
         var obj = this;
 
         $(this.messageCenter).slideUp(function() {
+
             $(this).find('p').remove();
             $(this).removeClass();
 
             if(open === true) {
-                obj.toOpen(message, status, dismiss, callback, breaklines);
+                obj.toOpen(params);
             }
+
         });
 
     }
@@ -64,11 +85,11 @@ NAMESPACE.MessageCenter = {
 
         var obj = this;
 
-        if(dismiss === 'time') {
+            if(dismiss === 'time') {
 
-            setTimeout(function() {
-                obj.toClose();
-            }, obj.timeToClose)
+                setTimeout(function() {
+                     obj.toClose();
+                }, obj.timeToClose)
 
         } else if(dismiss instanceof Array) {
 
@@ -89,20 +110,20 @@ NAMESPACE.MessageCenter = {
         }
     }
 
-    , displayMessage: function(message, status, dismiss, callback, breaklines) {
+    , displayMessage: function(params) {
 
         var obj = this;
 
-        if(typeof message === 'undefined' || typeof status === 'undefined') {
+        if(typeof params.message === 'undefined' || typeof params.status === 'undefined') {
             throw new Error('MessageCenter: You need to pass the message and status parameter');
         }
 
-        obj.toOpen(message, status, dismiss, callback, breaklines);
-        
+        obj.toOpen(params);
+
         $(obj.messageCenter).find('.close').click(function() {
             obj.toClose();
         });
-        
+          
     }
 
 };

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Message Center</title>
+        <link rel="stylesheet" href="../messageCenter.css">
+        <style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+        </style>
+    </head>
+    <body>
+        <div id="messageCenter">
+            <div class="close">&times;</div>
+        </div>
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="../messageCenter.jquery.js"></script>
+
+        <script>
+
+        	$(function() {
+
+        		$('#messageCenter').messageCenter({message:'test', status: 'success', dismiss: 'time'});
+
+        	});
+
+        </script>
+    </body>
+</html>

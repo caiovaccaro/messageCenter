@@ -1,31 +1,39 @@
 messageCenter
 =============
 
-Script para incorporar uma forma padrão de exibição de mensagens.
+Javascript + CSS plugin to display messages and warnings.
 
 
-Instruções
+Instructions
 ----------
+You can use it as a jQuery plugin or as a namespaced object. Both requires jQuery to work.
+
+- messageCenter.jquery.js is setup as a jQuery plugin and messageCenter.js as a namespaced object
+- Place both Css(or Less if you prefer) and Javascript files in your project(choose one)
+- Call messageCenter
 
 ```javascript
-NAMESPACE.MessageCenter.displayMessage(message, status, dismiss, callback, breaklines);
+NAMESPACE.MessageCenter.displayMessage({
+	message: 'My beautiful message',
+	status: 'success',
+	dismiss: 'time',
+	callback: function() { console.log('callback'); },
+	breaklines: true,
+	close: true
+});
+
+$('#yourElement').messageCenter({
+	message: 'My beautiful message',
+	status: 'success',
+	dismiss: 'time',
+	callback: function() { console.log('callback'); },
+	breaklines: true,
+	close: true
+});
 ```
-- message: Pode ser uma string ou array de strings. Ex: 'Senha incorreta' ou ['Senha incorreta.', 'CPF inválido']
-- status: Correspondente a classe adicionada para estilo visual. Ex: 'warning', 'error', 'sucess'. Atualmente correspondem à amarelo, vermelho e verde.
-- dismiss(opcional): Opção 1: Id ou classe de elemento que ao ser clicado fecha o box de mensagem(ex: '.input', '#nome') ou array de elementos ['.input', '#nome']. Opção 2: string 'time' para fechar sozinho.
-- callback(opcional): Função para ser executada depois que o box de mensagem aparece por completo.
-- breaklines(opcional): bool. Se for true, ao invés de espaços entre frases terá uma quebra de linha. Usar em conjunto com message em array.
-
-Exemplo:
-
-```javascript
-var message = ['Ops! Esqueceu alguma coisa?', 'Nome é obrigatório.', 'Por favor digite uma mensagem'],
-	status = 'warning',
-	dismiss = 'time',
-	callback = function() {
-		console.log('Testando callback');
-	},
-	breaklines = true;
-
-NAMESPACE.MessageCenter.displayMessage(message, status, dismiss, callback, breaklines);
-```
+- message: String or Array. Example: 'Wrong password' or ['Wrong password', 'User name taken']
+- status: Name of the Css Class added to the element. Example: 'warning', 'error', 'success'. Actually corresponds to yellow, red and green right now
+- dismiss(optional): Option 1: Id or Class from element that when clicked will close the messageCenter(example: '.input', '#name') or Array ['.input', '#name']. Option 2: 'time' to close by itself after a few seconds.
+- callback(optional): Function. Executed when messageCenter is completely shown
+- breaklines(optional): Bool. If it's true the spacer between messages will break lines. Use together with 'messages' as Array
+- close(optional): Bool. If false it will not close the messageCenter unless you want to display another message
