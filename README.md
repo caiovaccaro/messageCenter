@@ -9,7 +9,7 @@ Setup
 Requires jQuery 1.8+
 
 - Place both Javascript and CSS files in your project
-- Paste the index.html file content after your <body> tag
+- Paste the index.html file content after your opening body tag
 
 Usage
 -----
