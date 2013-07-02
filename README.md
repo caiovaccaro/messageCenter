@@ -4,36 +4,31 @@ messageCenter
 Javascript + CSS plugin to display messages and warnings.
 
 
-Instructions
+Setup
 ----------
-You can use it as a jQuery plugin or as a namespaced object. Both requires jQuery to work.
+Requires jQuery 1.8+
 
-- messageCenter.jquery.js is setup as a jQuery plugin and messageCenter.js as a namespaced object
-- Place both Css(or Less if you prefer) and Javascript files in your project(choose one)
-- Call messageCenter
+- Place both Javascript and CSS files in your project
+- Paste the index.html file content after your <body> tag
+
+Usage
+-----
 
 ```javascript
-NAMESPACE.MessageCenter.displayMessage({
-	message: 'My beautiful message',
-	status: 'success',
-	dismiss: 'time',
-	callback: function() { console.log('callback'); },
-	breaklines: true,
-	close: true
-});
+var messageCenter = new MessageCenter();
 
-$('#yourElement').messageCenter({
+messageCenter.displayMessage({
 	message: 'My beautiful message',
-	status: 'success',
-	dismiss: 'time',
-	callback: function() { console.log('callback'); },
-	breaklines: true,
-	close: true
+	status: 'success', // Corresponds to the CSS class added to the element
+	dismiss: 'time', // optional (How to dismiss the message, instructions below. Defaults to not dismiss)
+	callback: function() { console.log('callback'); }, // optional (Optional callback)
+	breaklines: true, // optional(Breakline after each message or not, default to false)
+	close: true // optional(Show or hide close button. Defaults to false)
 });
 ```
-- message: String or Array. Example: 'Wrong password' or ['Wrong password', 'User name taken']
-- status: Name of the Css Class added to the element. Example: 'warning', 'error', 'success'. Actually corresponds to yellow, red and green right now
+- message: String or Array. Example: 'Wrong password' or ['Wrong password', 'User name taken'].
+- status: Name of the Css Class added to the element. Example: 'warning', 'error', 'success'. Actually corresponds to yellow, red and green right now.
 - dismiss(optional): Option 1: Id or Class from element that when clicked will close the messageCenter(example: '.input', '#name') or Array ['.input', '#name']. Option 2: 'time' to close by itself after a few seconds.
-- callback(optional): Function. Executed when messageCenter is completely shown
-- breaklines(optional): Bool. If it's true the spacer between messages will break lines. Use together with 'messages' as Array
-- close(optional): Bool. If false it will not close the messageCenter unless you want to display another message
+- callback(optional): Function. Executed when messageCenter is completely shown.
+- breaklines(optional): true/false. If it's true the spacer between messages will break lines. Use together with 'messages' as Array.
+- close(optional): true/false. If false it will not show the close button.

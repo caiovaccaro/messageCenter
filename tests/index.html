@@ -8,6 +8,7 @@
 			body {
 				margin: 0;
 				padding: 0;
+                font-family: Helvetica, Arial, sans-serif;
 			}
         </style>
     </head>
@@ -16,16 +17,18 @@
             <div class="close">&times;</div>
         </div>
         
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-        <script src="../messageCenter.jquery.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="../messageCenter.js"></script>
 
         <script>
 
         	$(function() {
 
-        		$('#messageCenter').messageCenter({message:'test', status: 'success', dismiss: 'time'});
+                var msg = new MessageCenter();
 
-        	});
+                msg.displayMessage({ message: 'Test', status: 'success', dismiss: 'time' });
+
+            });
 
         </script>
     </body>

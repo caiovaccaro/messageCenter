@@ -1,129 +1,138 @@
-var NAMESPACE = NAMESPACE || {};
+;(function() {
 
-NAMESPACE.MessageCenter = {
+    MessageCenter = function() {
 
-	// params: message, status, dismiss, callback, breaklines, close
-    // message: Message to be shown
-    // status: 'success' or 'error'
-    // dismiss: class or id of element to trigger closing when clicked, or string 'time' to close by itself
-    // callback after showing up
-    // breaklines, if true add <br> between itens of messages array
-    // close, if false don't show close link
+        this.messageCenter = '#messageCenter';
+        this.timeToClose = 6000;
 
-    messageCenter: '#messageCenter',
-    timeToClose: 6000
+        return {
 
-    , toOpen: function(params) {
+            // params: message, status, dismiss, callback, breaklines, close
+            // message: Message to be shown
+            // status: 'success' or 'error'
+            // dismiss: class or id of element to trigger closing when clicked, or string 'time' to close by itself
+            // callback after showing up
+            // breaklines, if true add <br> between itens of messages array
+            // close, if false don't show close link
 
-        var message = params.message,
-            status = params.status,
-            dismiss = params.dismiss,
-            callback = params.callback,
-            breaklines = params.breaklines,
-            close = params.close,
-            messagesFromArray = '',
-            spacer = breaklines === true ? '<br/>' : ' ';
+            messageCenter: this.messageCenter,
+            timeToClose: this.timeToClose
 
-        if($(this.messageCenter).is(':visible')) {
+            , toOpen: function(params) {
 
-            this.toClose(true, params);
+                var message = params.message,
+                    status = params.status,
+                    dismiss = params.dismiss,
+                    callback = params.callback,
+                    breaklines = params.breaklines,
+                    close = params.close,
+                    messagesFromArray = '',
+                    spacer = breaklines === true ? '<br/>' : ' ';
 
-        } else {
+                if($(this.messageCenter).is(':visible')) {
 
-            if(typeof dismiss !== 'undefined') {
-              
-                this.dismiss(dismiss);
+                    this.toClose(true, params);
 
-            }
+                } else {
 
-            if(message instanceof Array) {
+                    if(typeof dismiss !== 'undefined') {
+                      
+                        this.dismiss(dismiss);
 
-                for (var i = 0; i <= message.length - 1; i++) {
-                    messagesFromArray += spacer + message[i];
-                };
+                    }
 
-                message = messagesFromArray.replace(spacer, ''); // Remove first spacer;
+                    if(message instanceof Array) {
 
-            }
+                        for (var i = 0; i <= message.length - 1; i++) {
+                            messagesFromArray += spacer + message[i];
+                        };
 
-            if(typeof close !== 'undefined' && close === false) {
+                        message = messagesFromArray.replace(spacer, ''); // Remove first spacer;
 
-                $(this.messageCenter).find('.close').hide();
+                    }
 
-            }
+                    if(typeof close !== 'undefined' && close === false) {
 
-            $(this.messageCenter).append('<p>' + message + '</p>').addClass(status).slideDown(function() {
+                        $(this.messageCenter).find('.close').hide();
 
-                if(typeof callback !== 'undefined' && typeof callback === 'function') {
-                    callback();
+                    }
+
+                    $(this.messageCenter).append('<p>' + message + '</p>').addClass(status).slideDown(function() {
+
+                        if(typeof callback !== 'undefined' && typeof callback === 'function') {
+                            callback();
+                        }
+
+                    });
+
                 }
 
-            });
-
-        }
-
-    }
-
-    , toClose: function(open, params) {
-
-        var obj = this;
-
-        $(this.messageCenter).slideUp(function() {
-
-            $(this).find('p').remove();
-            $(this).removeClass();
-
-            if(open === true) {
-                obj.toOpen(params);
             }
 
-        });
+            , toClose: function(open, params) {
 
-    }
+                var obj = this;
 
-    , dismiss: function(dismiss) {
+                $(this.messageCenter).slideUp(function() {
 
-        var obj = this;
+                    $(this).find('p').remove();
+                    $(this).removeClass();
 
-            if(dismiss === 'time') {
+                    if(open === true) {
+                        obj.toOpen(params);
+                    }
 
-                setTimeout(function() {
-                     obj.toClose();
-                }, obj.timeToClose)
-
-        } else if(dismiss instanceof Array) {
-
-            for (var i = dismiss.length - 1; i >= 0; i--) {
-
-                $(dismiss[i]).click(function() {
-                    obj.toClose();
                 });
 
-            };
+            }
 
-        } else {
+            , dismiss: function(dismiss) {
 
-            $(dismiss).click(function() {
-                obj.toClose();
-            });
+                var obj = this;
 
-        }
-    }
+                    if(dismiss === 'time') {
 
-    , displayMessage: function(params) {
+                        setTimeout(function() {
+                             obj.toClose();
+                        }, obj.timeToClose)
 
-        var obj = this;
+                } else if(dismiss instanceof Array) {
 
-        if(typeof params.message === 'undefined' || typeof params.status === 'undefined') {
-            throw new Error('MessageCenter: You need to pass the message and status parameter');
-        }
+                    for (var i = dismiss.length - 1; i >= 0; i--) {
 
-        obj.toOpen(params);
+                        $(dismiss[i]).click(function() {
+                            obj.toClose();
+                        });
 
-        $(obj.messageCenter).find('.close').click(function() {
-            obj.toClose();
-        });
-          
-    }
+                    };
 
-};
+                } else {
+
+                    $(dismiss).click(function() {
+                        obj.toClose();
+                    });
+
+                }
+            }
+
+            , displayMessage: function(params) {
+
+                var obj = this;
+
+                if(typeof params.message === 'undefined' || typeof params.status === 'undefined') {
+                    throw new Error('MessageCenter: You need to pass the message and status parameter');
+                }
+
+                obj.toOpen(params);
+
+                $(obj.messageCenter).find('.close').click(function() {
+                    obj.toClose();
+                });
+                  
+            }
+
+        };
+
+    };
+
+}).call(this);
