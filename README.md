@@ -6,7 +6,7 @@ Javascript + CSS plugin to display messages and warnings.
 
 Setup
 ----------
-Requires jQuery 1.8+
+**Requires jQuery 1.8+**
 
 - Place both Javascript and CSS files in your project
 - Paste the index.html file content after your opening body tag
@@ -32,3 +32,12 @@ messageCenter.displayMessage({
 - callback(optional): Function. Executed when messageCenter is completely shown.
 - breaklines(optional): true/false. If it's true the spacer between messages will break lines. Use together with 'messages' as Array.
 - close(optional): true/false. If false it will not show the close button.
+
+Options
+-------
+You can change the html element for the MessageCenter and the time to close the display.  
+```javascript
+var messages = new MessageCenter({ element: '#messages', timeToClose: 3000 });
+
+messages.displayMessage({ message: 'My beautiful message', status: 'success', dismiss: 'time' });
+```

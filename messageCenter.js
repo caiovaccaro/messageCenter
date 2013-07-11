@@ -1,137 +1,164 @@
 ;(function() {
 
-    MessageCenter = function() {
+    /**
+     * Constructor
+     * @param  {object} options:
+     * {
+     *   @param {string} element
+     *   @param {int} timeToClose
+     * }
+     * @return {void}
+     */
+    MessageCenter = function(options) {
 
-        this.messageCenter = '#messageCenter';
-        this.timeToClose = 6000;
+        this.messageCenter = typeof options !== 'undefined' && typeof options.element !== 'undefined' ? options.element : '#messageCenter';
+        this.timeToClose = typeof options !== 'undefined' && typeof options.timeToClose !== 'undefined' ? options.timeToClose : 6000;
 
-        return {
+    };
 
-            // params: message, status, dismiss, callback, breaklines, close
-            // message: Message to be shown
-            // status: 'success' or 'error'
-            // dismiss: class or id of element to trigger closing when clicked, or string 'time' to close by itself
-            // callback after showing up
-            // breaklines, if true add <br> between itens of messages array
-            // close, if false don't show close link
+    MessageCenter.prototype = {
 
-            messageCenter: this.messageCenter,
-            timeToClose: this.timeToClose
+        /**
+         * Delegate action
+         * @param {object} params:
+         * { 
+         *   @param {string or array} message: message to be shown
+         *   @param {string} status: css class added, can be 'success', 'warning', 'error' depending on the theme
+         *   @param {string or array} dismiss: class or id of element to trigger closing when clicked, or array of classes/ids, or string 'time' to close by itself. Optional
+         *   @param {function} callback: function executed after showing up. Optional
+         *   @param {bool} breaklines: if true add <br> between itens of messages array. Optional
+         *   @param {bool} close, if false don't show close link. Optional
+         * }
+         * @return {void}
+         */
+        displayMessage: function(params) {
 
-            , toOpen: function(params) {
+            var obj = this;
 
-                var message = params.message,
-                    status = params.status,
-                    dismiss = params.dismiss,
-                    callback = params.callback,
-                    breaklines = params.breaklines,
-                    close = params.close,
-                    messagesFromArray = '',
-                    spacer = breaklines === true ? '<br/>' : ' ';
+            if(typeof params.message === 'undefined' || typeof params.status === 'undefined') {
+                throw new Error('MessageCenter: You need to pass the message and status parameter');
+            }
 
-                if($(this.messageCenter).is(':visible')) {
+            obj.toOpen(params);
 
-                    this.toClose(true, params);
+            $(obj.messageCenter).find('.close').click(function() {
+                obj.toClose();
+            });
+              
+        },
 
-                } else {
+        /**
+         * Open MessageCenter
+         * @param  {object} params (from displayMessage)
+         * @return {void}
+         */
+        toOpen: function(params) {
 
-                    if(typeof dismiss !== 'undefined') {
-                      
-                        this.dismiss(dismiss);
+            var message = params.message,
+                status = params.status,
+                dismiss = params.dismiss,
+                callback = params.callback,
+                breaklines = params.breaklines,
+                close = params.close,
+                messagesFromArray = '',
+                spacer = breaklines === true ? '<br/>' : ' ';
 
-                    }
+            if($(this.messageCenter).is(':visible')) {
 
-                    if(message instanceof Array) {
+                this.toClose(true, params);
 
-                        for (var i = 0; i <= message.length - 1; i++) {
-                            messagesFromArray += spacer + message[i];
-                        };
+            } else {
 
-                        message = messagesFromArray.replace(spacer, ''); // Remove first spacer;
-
-                    }
-
-                    if(typeof close !== 'undefined' && close === false) {
-
-                        $(this.messageCenter).find('.close').hide();
-
-                    }
-
-                    $(this.messageCenter).append('<p>' + message + '</p>').addClass(status).slideDown(function() {
-
-                        if(typeof callback !== 'undefined' && typeof callback === 'function') {
-                            callback();
-                        }
-
-                    });
+                if(typeof dismiss !== 'undefined') {
+                  
+                    this.dismiss(dismiss);
 
                 }
 
-            }
+                if(message instanceof Array) {
 
-            , toClose: function(open, params) {
+                    for (var i = 0; i <= message.length - 1; i++) {
+                        messagesFromArray += spacer + message[i];
+                    };
 
-                var obj = this;
+                    message = messagesFromArray.replace(spacer, ''); // Remove first spacer;
 
-                $(this.messageCenter).slideUp(function() {
+                }
 
-                    $(this).find('p').remove();
-                    $(this).removeClass();
+                if(typeof close !== 'undefined' && close === false) {
 
-                    if(open === true) {
-                        obj.toOpen(params);
+                    $(this.messageCenter).find('.close').hide();
+
+                }
+
+                $(this.messageCenter).append('<p>' + message + '</p>').addClass(status).slideDown(function() {
+
+                    if(typeof callback !== 'undefined' && typeof callback === 'function') {
+                        callback();
                     }
 
                 });
 
             }
 
-            , dismiss: function(dismiss) {
+        },
 
-                var obj = this;
+        /**
+         * Close MessageCenter
+         * @param  {bool} open
+         * @param  {object} params (from displayMessage)
+         * @return {void}
+         */
+        toClose: function(open, params) {
 
-                    if(dismiss === 'time') {
+            var obj = this;
 
-                        setTimeout(function() {
-                             obj.toClose();
-                        }, obj.timeToClose)
+            $(this.messageCenter).slideUp(function() {
 
-                } else if(dismiss instanceof Array) {
+                $(this).find('p').remove();
+                $(this).removeClass();
 
-                    for (var i = dismiss.length - 1; i >= 0; i--) {
+                if(open === true) {
+                    obj.toOpen(params);
+                }
 
-                        $(dismiss[i]).click(function() {
-                            obj.toClose();
-                        });
+            });
 
-                    };
+        },
 
-                } else {
+        /**
+         * Trigger dismiss(close event)
+         * @param  {string or array} dismiss
+         * @return {void}
+         */
+        dismiss: function(dismiss) {
 
-                    $(dismiss).click(function() {
+            var obj = this;
+
+            if(dismiss === 'time') {
+
+                    setTimeout(function() {
+                         obj.toClose();
+                    }, obj.timeToClose)
+
+            } else if(dismiss instanceof Array) {
+
+                for (var i = dismiss.length - 1; i >= 0; i--) {
+
+                    $(dismiss[i]).click(function() {
                         obj.toClose();
                     });
 
-                }
-            }
+                };
 
-            , displayMessage: function(params) {
+            } else {
 
-                var obj = this;
-
-                if(typeof params.message === 'undefined' || typeof params.status === 'undefined') {
-                    throw new Error('MessageCenter: You need to pass the message and status parameter');
-                }
-
-                obj.toOpen(params);
-
-                $(obj.messageCenter).find('.close').click(function() {
+                $(dismiss).click(function() {
                     obj.toClose();
                 });
-                  
-            }
 
-        };
+            }
+        }
 
     };
 
