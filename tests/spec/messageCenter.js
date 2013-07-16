@@ -51,9 +51,13 @@ describe('MessageCenter', function() {
 
 		describe('toOpen', function() {
 			beforeEach(function() {
-				msg.toClose();
 				spyOn(msg, 'toClose');
 				spyOn(msg, 'dismiss');
+			});
+			afterEach(function() {
+				setTimeout(function() {
+					msg.toClose();
+				}, 500);
 			});
 			it('should call toClose when MessageCenter is visible and call dismiss when it is defined', function() {
 				msg.displayMessage({ message: 'Hello!', status: 'success', dismiss: 'time' });
